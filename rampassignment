@@ -1,0 +1,17 @@
+const createWS = (domainName, stage) => {
+  const endPoint = '${domainName}/${stage}';
+  return new AWS.ApiGatewayManagementApi({
+    apiVersion: '2018-11-29',
+    endPoint
+  });
+};
+
+const sendMessage = (domainName, stage, connectionId, message) => {
+  const ws = createWS(domainName, stage);
+
+  const postParams = {
+    Data: JSON.stringify(message),
+    ConnectionId: connectionId
+  };
+  return ws.postToConnection(postParams).promise();
+};
